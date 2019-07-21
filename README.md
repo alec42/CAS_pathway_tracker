@@ -17,6 +17,7 @@
 <br />
 <p align="center">
   <h3 align="center">CAS Pathway tracker</h3>
+  <p align="center">
   <a href="https://github.com/alec42/CAS_pathway_tracker/tree/master/README_source">
     <img src="https://github.com/alec42/CAS_pathway_tracker/blob/master/README_source/logo.png?raw=true" width="50%" height="50%">
   </a>
@@ -43,9 +44,6 @@
 
 * [About the Project](#about-the-project)
   * [Built With](#built-with)
-* [Getting Started](#getting-started)
-  * [Prerequisites](#prerequisites)
-  * [Installation](#installation)
 * [Usage](#usage)
 * [Roadmap](#roadmap)
 * [Contributing](#contributing)
@@ -58,18 +56,14 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+<!-- [![Product Name Screen Shot][product-screenshot]](https://example.com) -->
 
-There are many great README templates available on GitHub, however, I didn't find one that really suit my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need.
+It's a well known fact that the exam path is a complicated one. 
+It can often be challenging to figure out when to do what exams, and which classes help to prepare for them.
+This project aims to be similar to the SOA's integrated pathway tracker with some more custom integrations with respect to dates and classes related to different exams.
 
-Here's why:
-* Your time should be focused on creating something amazing. A project that solves a problem and helps others
-* You shouldn't be doing the same tasks over and over like creating a README from scratch
-* You should element DRY principles to the rest of your life :smile:
-
-Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue with the tag.
-
-A list of commonly used resources that I find helpful are listed in the acknowledgements.
+Here's the SOA's tool :
+[![SOA Tool][screenshot-tool]]("https://github.com/alec42/CAS_pathway_tracker/blob/master/README_source/SOA_tool.png?raw=true")
 
 ### Built With
 This section should list any major frameworks that you built your project using. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
