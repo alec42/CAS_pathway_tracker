@@ -1,0 +1,153 @@
+---
+title: "Goal Tracker"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    vertical_layout: scroll
+    css: styles.css
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(DBI)
+library(knitr)
+library(dplyr)
+library(htmltools)
+library(timevis)
+```
+
+```{r readData, include=FALSE}
+## Read in data from database
+db <- dbConnect(RSQLite::SQLite(), 'goals.sqlite')
+df.main <- dbReadTable(db, 'mainGoals')
+df.sub <- dbReadTable(db, 'subGoals')
+dbDisconnect(db)
+
+```
+
+
+Summary
+==========================
+
+```{r, echo = FALSE, eval = TRUE}
+
+sumOut <- lapply(seq(nrow(df.main)), function(i) {
+  df.subForMain <- df.sub %>% filter(refMain == df.main[i, 'refMain'])
+  goals <- list(
+    ## Heading
+    knit_expand(text = "Row {data-height=55}"),
+    knit_expand(text = "-----------------------------\n\n"), # New Row
+    knit_expand(text = sprintf("\n```{r mainheader_%s}\n", df.main[i, 'refMain'])), # start r chunk
+    knit_expand(text = sprintf("p(span(\"%s\", style = \"font-size: 130%%; color: blue;\"), br(), span(\"%s\", style = \"font-size: 85%%;\"))", df.main[i, 'name'], df.main[i, 'notes'])),
+    knit_expand(text = "\n```\n"), # end r chunk
+
+    ## Gauges
+    knit_expand(text = "Row {data-height=150}"),
+    knit_expand(text = "-----------------------------\n\n"), # New Row
+    sapply(seq(nrow(df.subForMain)), function(j){
+      if(is.na(df.subForMain[j, 'tags'])) {
+        myTags <- ''
+      } else {
+        myTags <- paste0(sapply(unlist(strsplit(df.subForMain[j, 'tags'], ';')), function(t) sprintf('<span class=\"label label-%s\">%s</span>', t, toupper(substr(t, 1, 1)))), collapse = ' ')
+      }
+      list(
+        knit_expand(text = sprintf("### SUBGOAL %s %s", j, myTags)), # Sub-goal gauge header
+        knit_expand(text = sprintf("\n```{r mainsubgoal_%s_%sB}\n", df.subForMain[j, 'refMain'], df.subForMain[j, 'refSub'])), # start r chunk
+        knit_expand(text = sprintf("div(gauge(%s, min = 0, max = 100, symbol = '%%', gaugeSectors(success = c(80, 100), warning = c(40, 79), danger = c(0, 39))), class = \"tooltipX\", span(class = \"tooltiptextX\", \"%s\"))", df.subForMain[j, 'percentComplete'], df.subForMain[j, 'name'])), # Gauge showing progress
+        knit_expand(text = "\n```\n") # end r chunk
+      )
+    })
+  )
+  paste(unlist(goals), collapse = '\n') # collapse together all lines with newline separator
+})
+
+```
+
+`r knit(text = paste(sumOut, collapse = '\n'))`
+
+
+Timeline
+==========================
+
+Row
+--------------------------
+
+```{r, echo = FALSE, eval = TRUE}
+df.tv <- transform(df.sub,
+                   start = ifelse(timeBound, start, paste0(format(Sys.Date(), '%Y'), '-01-01')),
+                   end = ifelse(timeBound, end, paste0(format(Sys.Date(), '%Y'), '-12-31')))
+df.tv$maingoal_ref <- apply(df.tv, 1, function(x) match(x['refMain'], unique(df.sub$refMain)))
+l.suborder <- setNames(lapply(unique(df.sub$refMain), function(x) df.sub[df.sub$refMain == x, 'refSub']), unique(df.sub$refMain))
+df.tv$subgoal_ref <- apply(df.tv, 1, function(x) match(as.numeric(x['refSub']), l.suborder[[x['refMain']]]))
+df.tv$group <- paste0('Goal ', df.tv$maingoal_ref)
+df.tv$content <- paste0('SubGoal ', df.tv$maingoal_ref, '.', df.tv$subgoal_ref)
+df.tv$title <- df.tv$name
+
+colRamp <- colorRampPalette(c('red', 'green'))
+colRamp101 <- colRamp(101)
+df.tv$style = paste0('background-color: ', colRamp101[df.tv$percentComplete + 1])
+
+df.tvGroups <- data.frame(id = unique(df.tv$group), content = unique(df.tv$group))
+
+timevis(data = df.tv, groups = df.tvGroups, showZoom = FALSE, width = '1000px', options = list(selectable = FALSE))
+
+```
+
+
+```{r, echo = FALSE, eval = TRUE}
+
+expandSub <- function(d) {
+  today <- format(Sys.Date(), '%Y-%m-%d')
+  d <- transform(d, status = ifelse(!timeBound, "Not Timebound",
+                                    ifelse(percentComplete == 100, "Completed",
+                                           ifelse(today > end, "Overdue",
+                                                  ifelse(percentComplete == 0, "Not Started", "Ongoing")))))
+  d <- transform(d, valColor = ifelse(!timeBound, "DarkGrey",
+                                    ifelse(percentComplete == 100, "DarkGreen",
+                                           ifelse(today > end, "Crimson",
+                                                  ifelse(percentComplete == 0, "CornflowerBlue", "LightGreen")))))
+
+  lapply(seq(nrow(d)), function(i) {
+    list(
+      knit_expand(text = "Row"),
+      knit_expand(text = "-----------------------------\n\n"), # New Row
+      knit_expand(text = sprintf("### SUBGOAL %s", i)), # Sub-goal textbox header
+      knit_expand(text = sprintf("\n```{r subgoal_%s_%sA}\n", d[i, 'refMain'], d[i, 'refSub'])), # start r chunk
+      knit_expand(text = sprintf("p(\"%s\", class=\"goal-header\")\n", d[i, 'name'])), # Sub-goal Name
+      knit_expand(text = sprintf("h5(\"%s\")\n", d[i, 'notes'])), # Sub-goal Notes
+      ifelse(
+        is.na(d[i, 'tags']),
+        knit_expand(text = ''),
+        sapply(strsplit(d[i, 'tags'], ';'), function(t) knit_expand(text = sprintf("a(class = \"label label-%s\", \"%s\")", t, t)))
+      ),
+      knit_expand(text = "\n```\n"), # end r chunk
+      knit_expand(text = sprintf("### SUBGOAL %s", i)), # Sub-goal valuebox header
+      knit_expand(text = sprintf("\n```{r subgoal_%s_%sB}\n", d[i, 'refMain'], d[i, 'refSub'])), # start r chunk
+      knit_expand(text = ifelse(d[i, 'timeBound'], sprintf("valueBox(caption = '%s<br>%s', value = '%s', icon = 'fa-calendar', color = '%s')", d[i, 'start'], d[i, 'end'], d[i, 'status'], d[i, 'valColor']),
+                         sprintf("valueBox(caption = ' ', value = '%s', icon = 'fa-calendar', color = '%s')", d[i, 'status'], d[i, 'valColor']))), # Valuebox
+      knit_expand(text = "\n```\n"), # end r chunk
+      knit_expand(text = sprintf("### SUBGOAL %s", i)), # Sub-goal gauge header
+      knit_expand(text = sprintf("\n```{r subgoal_%s_%sC}\n", d[i, 'refMain'], d[i, 'refSub'])), # start r chunk
+      knit_expand(text = sprintf("gauge(%s, min = 0, max = 100, symbol = '%%', gaugeSectors(success = c(80, 100), warning = c(40, 79), danger = c(0, 39)))", d[i, 'percentComplete'])), # Goal Name
+      knit_expand(text = "\n```\n") # end r chunk
+    )
+  })
+}
+
+out <- lapply(seq(nrow(df.main)), function(i) {
+  
+  cont <- list(
+    knit_expand(text = sprintf("GOAL %s", i)), # New Page
+    knit_expand(text = "============================\n\n"), # New Page
+    knit_expand(text = sprintf("\n```{r maingoal_%s}\n", df.main[i, 'refMain'])), # start r chunk
+    knit_expand(text = sprintf("h4(\"Name: %s\")\n", df.main[i, 'name'])), # Goal Name
+    knit_expand(text = "\n```\n"), # end r chunk
+    unlist(expandSub(df.sub %>% filter(refMain == df.main[i, 'refMain'])))
+  )
+  paste(unlist(cont), collapse = '\n') # collapse together all lines with newline separator
+
+})
+
+```
+
+`r knit(text = paste(unlist(out), collapse = '\n'))`
