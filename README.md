@@ -16,11 +16,12 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
+  <h3 align="center">CAS Pathway tracker</h3>
   <a href="https://github.com/alec42/CAS_pathway_tracker/tree/master/README_source">
-    <img src="https://github.com/alec42/CAS_pathway_tracker/blob/master/README_source/logo.png?raw=true" width="80" height="80">
+    <img src="https://github.com/alec42/CAS_pathway_tracker/blob/master/README_source/logo.png?raw=true" width="50%" height="50%">
   </a>
 
-  <h3 align="center">CAS Pathway tracker</h3>
+
 <!--
     <br />
     <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
