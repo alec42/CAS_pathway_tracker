@@ -62,18 +62,22 @@ It's a well known fact that the exam path is a complicated one.
 It can often be challenging to figure out when to do what exams, and which classes help to prepare for them.
 This project aims to be similar to the SOA's integrated pathway tracker with some more custom integrations with respect to dates and classes related to different exams.
 
-Here's the SOA's tool :
-[![SOA Tool][screenshot-tool]]("https://github.com/alec42/CAS_pathway_tracker/blob/master/README_source/SOA_tool.png?raw=true")
+#### This is the SOA tool:
+<img src="https://github.com/alec42/CAS_pathway_tracker/blob/master/README_source/SOA_tool.png?raw=true">
 
+#### This is an adaptation of the CAS path to the style of the SOA's graphics
+
+<img src="https://github.com/alec42/CAS_pathway_tracker/blob/master/README_source/CAS_pathway.png?raw=true">
+<!-- 
 ### Built With
-This section should list any major frameworks that you built your project using. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
+This project is built with Shiny and R and is an adaptation of the 
 * [Bootstrap](https://getbootstrap.com)
 * [JQuery](https://jquery.com)
 * [Laravel](https://laravel.com)
 
 
 
-<!-- GETTING STARTED -->
+GETTING STARTED 
 ## Getting Started
 
 This is an example of how you may give instructions on setting up your project locally.
@@ -179,3 +183,4 @@ Project Link: [https://github.com/your_username/repo_name](https://github.com/yo
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/othneildrew
 [product-screenshot]: https://raw.githubusercontent.com/othneildrew/Best-README-Template/master/screenshot.png
+-->
