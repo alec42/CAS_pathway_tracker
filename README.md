@@ -12,6 +12,7 @@
 *** [![LinkedIn][linkedin-shield]][linkedin-url]
 -->
 
+**Présentement encore en phase conceptualisation**
 
 <!-- PROJECT LOGO -->
 <br />
