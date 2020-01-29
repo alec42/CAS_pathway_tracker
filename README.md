@@ -12,7 +12,7 @@
 *** [![LinkedIn][linkedin-shield]][linkedin-url]
 -->
 
-**Présentement encore en phase conceptualisation**
+**Still in the conceptualisation phase**
 
 <!-- PROJECT LOGO -->
 <br />
