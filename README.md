@@ -46,6 +46,7 @@
 * [About the Project](#about-the-project)
   * [Built With](#built-with)
 * [Usage](#usage)
+* [Idea](#idea)
 * [Roadmap](#roadmap)
 * [Contributing](#contributing)
 * [License](#license)
@@ -66,9 +67,23 @@ This project aims to be similar to the SOA's integrated pathway tracker with som
 #### This is the SOA tool:
 <img src="https://github.com/alec42/CAS_pathway_tracker/blob/master/README_source/SOA_tool.png?raw=true">
 
+This intuitive pathway gives a very good focal point for situating where students are in their exam-writing process. Additionnaly, it can lead to a multitude of study resources.
+
 #### This is an adaptation of the CAS path to the style of the SOA's graphics
 
 <img src="https://github.com/alec42/CAS_pathway_tracker/blob/master/README_source/CAS_pathway.png?raw=true">
+
+## Idea
+
+The idea is to build a similar path but customize it to students. 
+Presently, these are some of the ideas I have rummaging in my head:
++ Include some sort of timeline to visualise when students can complete exams.
+  + For example, MAS-I and MAS-II are given in April and October so students could visually see this and plan in their head.
++ Additionally, students could see which exams' content is viewed in which university courses to foresee at what times they can complete exams and how much material they will have to see by themselves.
++ There could then be a collection of links not only to the CAS's resources, but other student's resources.
++ Students could also then better foresee when in the future they will complete exams and forecast estimated dates for ACAS and FCAS obtention.
++ Potentially, some data could be linked in from actuarial-lookup to better prepare students for the potentially more difficult exams.
+
 <!-- 
 ### Built With
 This project is built with Shiny and R and is an adaptation of the 
