@@ -2,7 +2,7 @@ library(shiny)
 library(shinyWidgets) #useShinydashboardPlus
 library(shinydashboardPlus) #gradientBox
 library(shinydashboard) #valueBoxOutput
-
+source(file = "modules.R")
 ui <- fluidPage(
     useShinydashboardPlus(),
     titlePanel("Cheminement d'examens"),
@@ -13,20 +13,19 @@ ui <- fluidPage(
         timelineLabel("Examens préliminaires", color = "blue"),
         timelineItem(
             title = "Examen P",
+            examBoxUI("P"),
             icon = "gears",
             color = "olive",
             time = "janvier de la première année",
             border = F
-            # footer = "Here is the footer",
         ),
         timelineItem(
             title = "Examen FM",
+            examBoxUI("FM"),
             icon = "gears",
             color = "olive",
             time = "mai de la première année",
-            border = F,
-            # footer = "Here is the footer",
-            # "accréditable"
+            border = F
         ),
         timelineItem(
             title = "Examen IFM",
@@ -129,152 +128,8 @@ ui <- fluidPage(
         closable = F,
         collapsible = T,
         collapsed = T,
-        gradientBox(
-            title = "Examen P: Probabilité",
-            width = 12,
-            # icon = "fa fa-angle-up",
-            gradientColor = "blue",
-            boxToolSize = "xs",
-            closable = F,
-            collapsible = T,
-            accordion(
-                accordionItem(
-                    id = 1,
-                    title = "Cours reliés",
-                    color = "danger",
-                    collapsed = FALSE,
-                    navPills(
-                        navPillsItem(
-                            active = TRUE,
-                            pillName = "Analyse probabiliste des risques actuariels", 
-                            pillText = "ACT-1002"
-                        ),
-                        valueBox(value = "90%",
-                                 icon = icon("weight"),
-                                 subtitle = "matière couverte en ACT-1002",
-                                 color = "blue",
-                                 width = 0.2),
-                        valueBox(value = "B",
-                                 icon = icon("weight"),
-                                 subtitle = "Note requise pour l'accréditation de l'examen",
-                                 color = "green",
-                                 width = 0.2),
-                        box(
-                            title = "Matière non-couverte",
-                            solidHeader = T,
-                            background = "light-blue",
-                            status = "info",
-                            width = NULL,
-                            todoList(
-                                sortable = FALSE,
-                                todoListItem(
-                                    label = "Statistiques d'ordre",
-                                    "Couvert en ACT-2000"
-                                )
-                            )
-                        )
-                    )
-                ),
-                accordionItem(
-                    id = 2,
-                    title = "Détails sur l'examen",
-                    color = "warning",
-                    collapsed = FALSE,
-                    navPills(
-                        navPillsItem(
-                            active = TRUE,
-                            pillName = "Périodes d'examination",
-                            # pillColor = "black",
-                            pillText = "janvier, mars, mai, juin, juillet, septembre, novembre"
-                        ),
-                        navPillsItem(
-                            active = TRUE,
-                            pillName = "Coût",
-                            # pillColor = "black",
-                            pillText = "250$" 
-                        )
-                    )
-                )
-            ),
-            footer = fluidPage(
-                "Progression",
-                progressBar(id = "pb7", value = 10, display_pct = F, status = "warning")
-            )
-        ),
-        gradientBox(
-            title = "Examen FM: Mathématiques financières",
-            width = 12,
-            gradientColor = "blue",
-            boxToolSize = "xs",
-            closable = F,
-            collapsible = T,
-            accordion(
-                accordionItem(
-                    id = 1,
-                    title = "Cours reliés",
-                    color = "danger",
-                    collapsed = FALSE,
-                    navPills(
-                        navPillsItem(
-                            active = TRUE,
-                            pillName = "Mathématiques financières", 
-                            # pillColor = "black",
-                            pillText = "ACT-1001"
-                        ),
-                        valueBox(value = "94%",
-                                 icon = icon("weight"),
-                                 subtitle = "matière couverte en ACT-1001",
-                                 color = "blue",
-                                 width = 0.2),
-                        valueBox(value = "B+",
-                                 icon = icon("weight"),
-                                 subtitle = "Note requise pour l'accréditation de l'examen",
-                                 color = "green",
-                                 width = 0.2)
-                    ),
-                    box(
-                        title = "Matière non-couverte",
-                        solidHeader = T,
-                        background = "light-blue",
-                        status = "info",
-                        width = NULL,
-                        todoList(
-                            sortable = FALSE,
-                            todoListItem(
-                                label = "Interest Swap Rates"
-                            ),
-                            todoListItem(
-                                label = "Amortization of loans"
-                            )
-                        )
-                    )
-                ),
-                accordionItem(
-                    id = 2,
-                    title = "Détails sur l'examen",
-                    color = "warning",
-                    collapsed = FALSE,
-                    navPills(
-                        navPillsItem(
-                            active = TRUE,
-                            pillName = "Périodes d'examination",
-                            # pillColor = "black",
-                            pillText = "février, avril, juin, août, octobre, décembre"
-                        ),
-                        navPillsItem(
-                            active = TRUE,
-                            pillName = "Coût",
-                            # pillColor = "black",
-                            pillText = "250$" 
-                        )
-                    )
-                )
-            ),
-            footer = fluidPage(
-                "Progression",
-                progressBar(id = "pb7", value = 20, display_pct = F, status = "warning")
-            )
-        ),
+        examBoxUI("P"),
+        examBoxUI("FM"),
         gradientBox(
             title = "Examen IFM: Investissement et marchés financiers",
             width = 12,
