@@ -40,7 +40,11 @@ examBoxUI <- function(exam) {
     sigles_cours <- exams_classes_list[[exam]]$sigle
     weights_cours <- exams_classes_list[[exam]]$weight
     grades_cours <- exams_classes_list[[exam]]$grade
-    noms_cours <- classes_list[[sigles_cours]]
+
+    noms_cours <- vector(length = length(sigles_cours))
+    for (i in seq_along(sigles_cours)) {
+        noms_cours[i] <- classes_list[[sigles_cours[i]]]
+    }
     
     gradientBox(
         title = paste0("Examen ", exam, ": ", exams_list[[exam]]$title),
@@ -49,37 +53,39 @@ examBoxUI <- function(exam) {
         accordion(
             accordionItem(id = 1,
                           title = "Cours reliés", color = "danger", collapsed = FALSE,
+                          
                           ##    Need to figure out how to create as many navPills/valueBox as classes there aree
                           ##    So, need length(noms_cours) navPillsIttem & valueBoxes
                           ##    Also, need to include condition not to create the second valueBox if the exam is not a part of UAP
                           navPills(
-                              navPillsItem(
-                                  active = TRUE,
-                                  pillName = noms_cours[1],
-                                  pillText = sigles_cours[1]
-                              ),
-                              valueBox(
-                                  value = weights_cours[1],
-                                  subtitle = paste0("matière couverte en ", sigles_cours[1]),
-                                  color = "blue", icon = icon("weight"), width = 0.2
-                              ),
-                              valueBox(
-                                  value = grades_cours[1],
-                                  subtitle = "Note requise pour l'accréditation",
-                                  color = "green", icon = icon("weight"), width = 0.2
-                              )
-                              ##    Ponder whether this can be properly implanted
-                              ##    How to maintain a list of non-seen material?
-                              # ,box(title = "Matière non-couverte",
-                              #     solidHeader = T, background = "light-blue", status = "info", width = NULL,
-                              #     todoList(
-                              #         sortable = FALSE,
-                              #         todoListItem(
-                              #             label = "Statistiques d'ordre",
-                              #             "Couvert en ACT-2000"
-                              #         )
-                              #     )
-                              # )
+                              uiOutput('mypills')  
+                          #     navPillsItem(
+                          #         active = TRUE,
+                          #         pillName = noms_cours[1],
+                          #         pillText = sigles_cours[1]
+                          #     ),
+                          #     valueBox(
+                          #         value = weights_cours[1],
+                          #         subtitle = paste0("matière couverte en ", sigles_cours[1]),
+                          #         color = "blue", icon = icon("weight"), width = 0.2
+                          #     ),
+                          #     valueBox(
+                          #         value = grades_cours[1],
+                          #         subtitle = "Note requise pour l'accréditation",
+                          #         color = "green", icon = icon("weight"), width = 0.2
+                          #     )
+                          #     ##    Ponder whether this can be properly implanted
+                          #     ##    How to maintain a list of non-seen material?
+                          #     # ,box(title = "Matière non-couverte",
+                          #     #     solidHeader = T, background = "light-blue", status = "info", width = NULL,
+                          #     #     todoList(
+                          #     #         sortable = FALSE,
+                          #     #         todoListItem(
+                          #     #             label = "Statistiques d'ordre",
+                          #     #             "Couvert en ACT-2000"
+                          #     #         )
+                          #     #     )
+                          #     # )
                           )
             ),
             accordionItem(id = 2,
@@ -104,6 +110,28 @@ examBoxUI <- function(exam) {
         )
     )
     
+}
+
+examBox <- function(input, output, session) {
+    output$mypills <- renderUI({s
+        lapply(seq_along(sigles_cours), function(i) {
+            navPillsItem(
+                active = TRUE,
+                pillName = noms_cours[i],
+                pillText = sigles_cours[i]
+            )
+            valueBox(
+                value = weights_cours[i],
+                subtitle = paste0("matière couverte en ", sigles_cours[i]),
+                color = "blue", icon = icon("weight"), width = 0.2
+            )
+            valueBox(
+                value = grades_cours[i],
+                subtitle = "Note requise pour l'accréditation",
+                color = "green", icon = icon("weight"), width = 0.2
+            )
+        })
+    })
 }
 
 

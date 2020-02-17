@@ -130,6 +130,7 @@ ui <- fluidPage(
         collapsed = T,
         examBoxUI("P"),
         examBoxUI("FM"),
+        examBoxUI("IFM"),
         gradientBox(
             title = "Examen IFM: Investissement et marchés financiers",
             width = 12,
@@ -811,7 +812,7 @@ ui <- fluidPage(
 
 
 server <- function(input, output, session) {
-
+    callModule(examBox, "IFM")
 }
     
 
